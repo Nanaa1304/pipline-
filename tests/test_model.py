@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-MIN_ACCURACY = 1.5
+MIN_ACCURACY = 0.87
 
 
 def test_model_accuracy():
