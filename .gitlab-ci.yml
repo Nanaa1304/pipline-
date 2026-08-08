@@ -1,0 +1,39 @@
+stages:
+  - lint
+  - test
+  - train
+
+default:
+  image: python:3.11-slim
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - .cache/pip
+
+lint:
+  stage: lint
+  script:
+    - flake8 src/ tests/ --max-line-length=100
+
+unit_tests:
+  stage: test
+  script:
+    - pytest tests/ --junitxml=report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+
+train_model:
+  stage: train
+  script:
+    - python src/train.py
+  artifacts:
+    paths:
+      - models/model.pkl
+    expire_in: 1 week
+  only:
+    - main
